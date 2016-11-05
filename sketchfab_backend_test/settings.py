@@ -44,6 +44,9 @@ INSTALLED_APPS = (
     # Django application for badge system:
     # @see: https://github.com/ulule/django-badgify
     'badgify',
+    # Django application for model hit count:
+    # @see: https://github.com/thornomad/django-hitcount
+    'hitcount',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -109,6 +112,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = 'public/static/'
 
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, "static"),
-# )
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'public/media/'
