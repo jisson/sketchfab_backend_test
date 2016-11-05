@@ -14,7 +14,14 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from sketchfab import views as sketchfab_views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+
+    # Routes from sketchfab
+    url(r'^$', sketchfab_views.index, name='index'),
+    url(r'^sketchfab/', include('sketchfab.urls')),
+
+    url(r'^badges/', include('badgify.urls')),
 ]

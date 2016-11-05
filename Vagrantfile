@@ -4,5 +4,5 @@ Vagrant.configure("2") do |config|
   end
   
   config.vm.box = "hashicorp/precise64"
-  config.vm.network "forwarded_port", guest: 8030, host: 8030
+  config.vm.network "forwarded_port", guest: 8040, host: 8040
 end

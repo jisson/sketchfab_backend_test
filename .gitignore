@@ -1,4 +1,12 @@
+# Generated files from IDE or virtual machines
 .idea
 .vagrant
 
+# Development database
+db.sqlite3
+
+# Compiled python files
 *.pyc
+
+# Static files
+public
