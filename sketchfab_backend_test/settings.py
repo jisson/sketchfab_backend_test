@@ -149,6 +149,8 @@ STATIC_ROOT = 'public/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'public/media/'
 
+BADGE_IMAGE_UPLOAD_ROOT = 'public/media/badges/img'
+
 # Overriding tag for messages with ERROR level to use it in combination with Bootstrap.
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'

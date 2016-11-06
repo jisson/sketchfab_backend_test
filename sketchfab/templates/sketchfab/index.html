@@ -1,21 +1,34 @@
 {% extends 'sketchfab/base_sketchfab.html' %}
-{% load badgify_tags %}
 
 {% block content %}
 
-    {#    {% badgify_badges as badges %}#}
-    {#    {% badgify_badges username="pierre" as badges %}#}
-    {#    {% badgify_badges user=user as badges %}#}
-    {##}
-    {#    {% for badge in badges %}#}
-    {#        {{ badge.name }}#}
-    {#    {% endfor %}#}
+    {% if user.is_authenticated %}
+        <h1>Browse our 3d models or upload yours!</h1>
+    {% else %}
+        <h1>Browse our 3d models or subscribe to add yours!</h1>
+    {% endif %}
 
-        {% if user.is_authenticated %}
-            <h1>Browse our 3d models or upload yours!</h1>
-        {% else %}
-            <h1>Browse our 3d models or subscribe to add yours!</h1>
+    <div style="padding-top: 15px">
+        {% for model3d in model3ds %}
+            {% include 'sketchfab/components/model_3d.html' with model3d=model3d %}
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+    <span class="step-links">
+        {% if model3ds.has_previous %}
+            <a href="?page={{ model3ds.previous_page_number }}">previous</a>
         {% endif %}
+
+        <span class="current">
+            Page {{ model3ds.number }} of {{ model3ds.paginator.num_pages }}.
+        </span>
+
+        {% if model3ds.has_next %}
+            <a href="?page={{ model3ds.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+    </div>
 
 {% endblock %}
 

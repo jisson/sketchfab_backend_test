@@ -11,6 +11,10 @@ body {
     padding-top: 15px;
 }
 
+.media {
+    text-align: left;
+}
+
 form legend {
   text-align: center;
 }

@@ -20,10 +20,12 @@ class Model3d(models.Model):
     """
     Represents a 3d Model in Sketchfab.
     """
-    user = models.ForeignKey(User, related_name='model3ds')   # TODO: can't use '3d_models' as related_name
+    user = models.ForeignKey(User, related_name='model3ds')
 
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, db_index=True, unique=True)
+
+    description = models.TextField(blank=True)
 
     picture = models.ImageField(upload_to=get_picture_file_path, null=True, blank=True)
 

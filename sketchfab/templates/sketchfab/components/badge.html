@@ -1,0 +1,26 @@
+{% load staticfiles %}
+{% load badgify_tags %}
+
+<div class="media">
+    <div class="media-left media-middle">
+        <a href="#">
+            {% with "sketchfab/img/badges/"|add:badge.slug|add:".png" as image_path %}
+                <img class="img-circle" src="{% static image_path %}" alt="{{ model3d.description }}">
+            {% endwith %}
+        </a>
+    </div>
+    <div class="media-body">
+        <h4 class="media-heading"><strong>{{ badge.name }}</strong></h4>
+        {{ badge.description }}<br><br>
+
+        {# Display a message to the user if it already earned that reward #}
+        {% if user.is_authenticated %}
+            {% badgify_badges user=user as earned_badges %}
+            {% if badge in earned_badges %}
+                <p class="text-success">Congratulation! You've earned that badge.</p>
+            {% endif %}
+        {% endif %}
+
+        <span class="glyphicon glyphicon-user" aria-hidden="true">{{ badge.users_count }}</span>
+    </div>
+</div>

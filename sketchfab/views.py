@@ -3,19 +3,16 @@ import logging
 from badgify.models import Badge
 from django.contrib.auth import logout as auth_logout, authenticate, login as auth_login
 from django.contrib.auth.models import User
-from django.http.response import HttpResponseRedirect, HttpResponse
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404, redirect
-from hitcount.models import HitCount
-from hitcount.views import HitCountMixin
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from django.views.generic import View
-from django.conf import settings
 from django.contrib import messages
 
-from sketchfab.forms import RegistrationForm
 from sketchfab.models import Model3d
+from sketchfab import services as sketchfab_services
 from sketchfab.serializers import UserSerializer, Model3dSerializer, BadgeSerializer
 
 logger = logging.getLogger('sketchfab')
@@ -83,18 +80,43 @@ class Model3dViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         queryset = Model3d.objects.all()
 
-        model3d = get_object_or_404(queryset, pk=pk)
-
-        hit_count = HitCount.objects.get_for_object(model3d)
-        hit_count_response = HitCountMixin.hit_count(request, hit_count)
-        logger.debug(hit_count_response)
+        model3d = sketchfab_services.get_model_with_hit_count(request, queryset, pk=pk)
 
         serializer = Model3dSerializer(model3d, context={'request': request})
         return Response(serializer.data)
 
 
+def badges(request):
+    return render(request, 'sketchfab/badges.html')
+
+
+def see_model3d(request, slug):
+    # model3d = get_object_or_404(Model3d, slug=slug)
+    #
+    # hit_count = HitCount.objects.get_for_object(model3d)
+    # hit_count_response = HitCountMixin.hit_count(request, hit_count)
+
+    model3d = sketchfab_services.get_model_with_hit_count(request, Model3d, slug=slug)
+
+    return render(request, 'sketchfab/model3ds.html', context={'model3d': model3d})
+
+
 def index(request):
-    return render(request, 'sketchfab/index.html')
+
+    model3d_list = Model3d.objects.all()
+    paginator = Paginator(model3d_list, 10)
+
+    page = request.GET.get('page')
+    try:
+        model3ds = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        model3ds = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        model3ds = paginator.page(paginator.num_pages)
+
+    return render(request, 'sketchfab/index.html', context={'model3ds': model3ds})
 
 
 class LoginView(View):
@@ -121,18 +143,3 @@ class LogoutView(View):
         auth_logout(request)
         messages.info(request, "You have been logged out.")
         return redirect('index')
-
-
-# def register(request):
-#
-#     if request.method == 'POST':
-#         registration_form = RegistrationForm(data=request.POST)
-#         if registration_form.is_valid():
-#             user = registration_form.save()
-#             user = authenticate(username=user.username, password=request.POST['password'])
-#             auth_login(request, user)
-#             return redirect('index')
-#     else:
-#         registration_form = RegistrationForm()
-#
-#     return render(request, 'sketchfab/register.html', {'registration_form': registration_form})

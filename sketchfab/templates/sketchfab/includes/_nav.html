@@ -1,3 +1,5 @@
+{% load sketchfab_extras %}
+
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -13,9 +15,8 @@
 
             {# Navigation #}
             <ul class="nav navbar-nav">
-                <li class="active"><a href="">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li class="{% current 'index' %}"><a href="{% url 'index' %}">Home</a></li>
+                <li class="{% current 'badges' %}"><a href="{% url 'badges' %}">Badges</a></li>
             </ul>
 
             {# Login / Register #}

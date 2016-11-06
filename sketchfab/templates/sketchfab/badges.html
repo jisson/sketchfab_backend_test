@@ -1,0 +1,14 @@
+{% extends 'sketchfab/base_sketchfab.html' %}
+{% load staticfiles %}
+{% load badgify_tags %}
+
+{% block content %}
+
+    <h1>Available badges</h1>
+
+    {% badgify_badges as badges %}
+    {% for badge in badges %}
+        {% include 'sketchfab/components/badge.html' with badge=badge %}
+    {% endfor %}
+
+{% endblock %}
