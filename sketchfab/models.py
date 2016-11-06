@@ -20,7 +20,7 @@ class Model3d(models.Model):
     """
     Represents a 3d Model in Sketchfab.
     """
-    user = models.ForeignKey(User, related_name='three_d_models')   # TODO: can't use '3d_models' as related_name
+    user = models.ForeignKey(User, related_name='model3ds')   # TODO: can't use '3d_models' as related_name
 
     picture = models.ImageField(upload_to=get_picture_file_path, null=True, blank=True)
     name = models.CharField(max_length=25)

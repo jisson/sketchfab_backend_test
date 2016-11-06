@@ -23,7 +23,9 @@ urlpatterns = [
 
     # Routes from sketchfab
     url(r'^$', sketchfab_views.index, name='index'),
-    url(r'^sketchfab/', include('sketchfab.urls')),
+
+    # url(r'^sketchfab/', include('sketchfab.urls')),
+    url(r'^api/v1/', include('sketchfab.urls')),
 
     url(r'^badges/', include('badgify.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

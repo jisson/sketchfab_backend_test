@@ -41,6 +41,9 @@ INSTALLED_APPS = (
     # Sketchfab main app
     'sketchfab',
 
+    # Django RestFramework
+    'rest_framework',
+
     # Django application for badge system:
     # @see: https://github.com/ulule/django-badgify
     'badgify',
