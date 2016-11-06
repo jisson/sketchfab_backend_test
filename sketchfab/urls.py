@@ -1,13 +1,15 @@
-from rest_framework.routers import DefaultRouter
+from django.conf.urls import patterns, url
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import CreateView
 
-from sketchfab.views import UserViewSet, Model3dViewSet
+from sketchfab.views import LoginView, LogoutView
 
-__author__ = 'Pierre Rodier | pierre@buffactory.com'
-
-
-router = DefaultRouter()
-router.register(r'users', UserViewSet, base_name='user')
-router.register(r'model3ds', Model3dViewSet, base_name='model3d')
-urlpatterns = router.urls
-
-# urlpatterns = patterns('sketchfab.views', )
+urlpatterns = patterns('sketchfab.views',
+                       url('^register/$', CreateView.as_view(
+                           template_name='sketchfab/register.html',
+                           form_class=UserCreationForm,
+                           success_url='/'
+                       ), name='register'),
+                       url('^login/', LoginView.as_view(), name='login'),
+                       url(r'logout/$', LogoutView.as_view(), name='logout')
+                       )

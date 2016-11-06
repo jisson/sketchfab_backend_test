@@ -1,16 +1,21 @@
 {% extends 'sketchfab/base_sketchfab.html' %}
 {% load badgify_tags %}
 
+{% block content %}
 
-{% block body %}
+    {#    {% badgify_badges as badges %}#}
+    {#    {% badgify_badges username="pierre" as badges %}#}
+    {#    {% badgify_badges user=user as badges %}#}
+    {##}
+    {#    {% for badge in badges %}#}
+    {#        {{ badge.name }}#}
+    {#    {% endfor %}#}
 
-    {% badgify_badges as badges %}
-    {% badgify_badges username="pierre" as badges %}
-{#    {% badgify_badges user=user as badges %}#}
-
-    {% for badge in badges %}
-        {{ badge.name }}
-    {% endfor %}
+        {% if user.is_authenticated %}
+            <h1>Browse our 3d models or upload yours!</h1>
+        {% else %}
+            <h1>Browse our 3d models or subscribe to add yours!</h1>
+        {% endif %}
 
 {% endblock %}
 

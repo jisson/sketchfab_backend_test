@@ -4,10 +4,23 @@
     {% include 'sketchfab/includes/_head.html' %}
 {% endblock %}
 
-{% block scripts %}
-    {% include 'sketchfab/includes/_scripts.html' %}
+{% block nav %}
+    {% include 'sketchfab/includes/_nav.html' %}
 {% endblock %}
 
-{% block body %}
+{% block messages %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
 
+{% block scripts %}
+    {% include 'sketchfab/includes/_scripts.html' %}
 {% endblock %}

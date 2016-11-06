@@ -1,0 +1,20 @@
+body {
+  padding-top: 50px;
+}
+
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.messages {
+    padding-top: 15px;
+}
+
+form legend {
+  text-align: center;
+}
+
+form {
+  text-align: left;
+}

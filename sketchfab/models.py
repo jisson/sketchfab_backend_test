@@ -22,8 +22,10 @@ class Model3d(models.Model):
     """
     user = models.ForeignKey(User, related_name='model3ds')   # TODO: can't use '3d_models' as related_name
 
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, db_index=True, unique=True)
+
     picture = models.ImageField(upload_to=get_picture_file_path, null=True, blank=True)
-    name = models.CharField(max_length=25)
 
     def __unicode__(self):
-        return self.name
+        return '%s' % self.name

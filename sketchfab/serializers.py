@@ -62,6 +62,12 @@ class UserSerializer(serializers.ModelSerializer):
     Api serializer for Django User model.
     """
 
+    badges = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='badge-detail'
+    )
+
     model3ds = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
@@ -70,7 +76,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'model3ds')
+        fields = ('id', 'username', 'model3ds', 'badges')
 
     def create(self, validated_data):
         return super(UserSerializer, self).create(validated_data)
