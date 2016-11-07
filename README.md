@@ -45,14 +45,14 @@ http://127.0.0.1:8040/api/v1/
 
 # Used libraries
 
--� https://github.com/ulule/django-badgify
+* https://github.com/ulule/django-badgify
 
 Simple app used on ulule.fr to handle badge features.
 
-�- https://github.com/thornomad/django-hitcount
+* https://github.com/thornomad/django-hitcount
 
 App allowing per object / user session hit count.
 
-�- http://www.django-rest-framework.org/
+* http://www.django-rest-framework.org/
 
 Used to produce the REST api.
