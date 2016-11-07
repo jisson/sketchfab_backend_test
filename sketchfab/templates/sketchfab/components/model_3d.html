@@ -5,7 +5,12 @@
     <div class="media">
         <div class="media-left">
             <a href="{% url 'see_model3d' model3d.slug %}">
-                <img class="media-object" style="width: 95px; height: 95px" src="{% static model3d.picture.url %}" alt="{{ model3d.description }}">
+                {% if model3d.picture %}
+                    <img class="media-object" style="width: 95px; height: 95px" src="{% static model3d.picture.url %}" alt="{{ model3d.description }}">
+                {% else %}
+                    {# TODO: Default image #}
+                    <img class="media-object" style="width: 95px; height: 95px" src="{% static 'sketchfab/img/undefined_image.png' %}" alt="{{ model3d.description }}">
+                {% endif %}
             </a>
         </div>
         <div class="media-body">

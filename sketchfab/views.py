@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from django.views.generic import View
 from django.contrib import messages
 
+from sketchfab.forms import Model3dForm
 from sketchfab.models import Model3d
 from sketchfab import services as sketchfab_services
 from sketchfab.serializers import UserSerializer, Model3dSerializer, BadgeSerializer
@@ -21,10 +22,6 @@ logger = logging.getLogger('sketchfab')
 class UserViewSet(viewsets.ViewSet):
     """
     Returns a list of all registered users in the system.
-
-    For more details on how accounts are activated please [see here][ref].
-
-    [ref]: http://example.com/activating-accounts
     """
 
     def list(self, request):
@@ -54,9 +51,10 @@ class UserViewSet(viewsets.ViewSet):
         return Response([BadgeSerializer(award.badge, context={'request': request}).data for award in awards])
 
 
-
-
 class BadgeViewSet(viewsets.ViewSet):
+    """
+    Returns a list of all badges available on the system.
+    """
 
     def list(self, request):
         queryset = Badge.objects.all()
@@ -71,6 +69,9 @@ class BadgeViewSet(viewsets.ViewSet):
 
 
 class Model3dViewSet(viewsets.ViewSet):
+    """
+    Returns a list of all model3d uploaded by users.
+    """
 
     def list(self, request):
         queryset = Model3d.objects.all()
@@ -78,6 +79,9 @@ class Model3dViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
+        """
+        Retrieve the model by adding hit_count if necessary.
+        """
         queryset = Model3d.objects.all()
 
         model3d = sketchfab_services.get_model_with_hit_count(request, queryset, pk=pk)
@@ -87,24 +91,32 @@ class Model3dViewSet(viewsets.ViewSet):
 
 
 def badges(request):
+    """
+    Template view to see available badges for users.
+    """
     return render(request, 'sketchfab/badges.html')
 
 
 def see_model3d(request, slug):
-    # model3d = get_object_or_404(Model3d, slug=slug)
-    #
-    # hit_count = HitCount.objects.get_for_object(model3d)
-    # hit_count_response = HitCountMixin.hit_count(request, hit_count)
+    """
+    Template view allowing users to see details of a model3d.
+    """
 
+    # Retrieving the model by adding hit_count if necessary
     model3d = sketchfab_services.get_model_with_hit_count(request, Model3d, slug=slug)
 
     return render(request, 'sketchfab/model3ds.html', context={'model3d': model3d})
 
 
 def index(request):
+    """
+    Template view.
+
+    From index, users can see a paginated list of all uploaded model3ds.
+    """
 
     model3d_list = Model3d.objects.all()
-    paginator = Paginator(model3d_list, 10)
+    paginator = Paginator(model3d_list, 5)
 
     page = request.GET.get('page')
     try:
@@ -120,6 +132,9 @@ def index(request):
 
 
 class LoginView(View):
+    """
+    Allow users to login.
+    """
 
     def post(self, request):
         username = request.POST['username']
@@ -128,6 +143,9 @@ class LoginView(View):
 
         if user is not None:
             if user.is_active:
+                # Checking if the user must be rewarded
+                sketchfab_services.check_pioneer_reward(user)
+                # Authenticating the user
                 auth_login(request, user)
                 messages.success(request, "You have been logged in successfully!")
             else:
@@ -138,8 +156,38 @@ class LoginView(View):
 
 
 class LogoutView(View):
+    """
+    Allow users to log out.
+    """
 
     def get(self, request):
         auth_logout(request)
         messages.info(request, "You have been logged out.")
         return redirect('index')
+
+
+class Model3dFormView(View):
+    """
+    Template view.
+
+    Allow user to upload new model3ds.
+    """
+
+    def post(self, request):
+        model3d_form = Model3dForm(request.POST, request.FILES)
+
+        if model3d_form.is_valid:
+            # Using custom form save method, ensuring slug uniqueness.
+            model_3d = model3d_form.save(commit=False)
+            model_3d.user = request.user
+            model_3d.save()
+
+            messages.success(request, "Your model have been created successfully!")
+            return redirect('index')
+
+        messages.error(request, "Please check field in red.")
+        return render(request, 'sketchfab/model3d_form.html', context={'model3d_form': model3d_form})
+
+    def get(self, request):
+        model3d_form = Model3dForm()
+        return render(request, 'sketchfab/model3d_form.html', context={'model3d_form': model3d_form})

@@ -155,3 +155,5 @@ BADGE_IMAGE_UPLOAD_ROOT = 'public/media/badges/img'
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+LOGIN_URL = 'sketchfab.views.index'

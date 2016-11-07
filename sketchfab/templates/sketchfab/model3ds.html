@@ -9,11 +9,15 @@
     <div class="media">
         <div class="media-left media-middle">
             <a href="#">
-                <img class="media-object" src="{% static model3d.picture.url %}" alt="{{ model3d.description }}">
+                {% if model3d.picture %}
+                    <img class="media-object" src="{% static model3d.picture.url %}" alt="{{ model3d.description }}">
+                {% else %}
+                    <img class="media-object" style="width: 95px; height: 95px" src="{% static 'sketchfab/img/undefined_image.png' %}" alt="{{ model3d.description }}">
+                {% endif %}
             </a>
         </div>
         <div class="media-body">
-            {{ model3d.description }}<br>
+            {{ model3d.description }}<br><br>
             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {% get_hit_count for model3d %}
         </div>
     </div>

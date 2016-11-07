@@ -17,6 +17,11 @@
             <ul class="nav navbar-nav">
                 <li class="{% current 'index' %}"><a href="{% url 'index' %}">Home</a></li>
                 <li class="{% current 'badges' %}"><a href="{% url 'badges' %}">Badges</a></li>
+
+                {# Allow user to post new model when they are logged in #}
+                {% if user.is_authenticated %}
+                    <li class="{% current 'model3d_form' %}"><a href="{% url 'model3d_form' %}">Upload</a></li>
+                {% endif %}
             </ul>
 
             {# Login / Register #}

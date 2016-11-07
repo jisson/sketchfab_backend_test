@@ -3,10 +3,10 @@
 
 {% block content %}
 
-    <form role="form" method="post">
-        <legend>Register</legend>
+    <form role="form" method="post" enctype="multipart/form-data">
+        <legend>Upload a new 3d Model</legend>
         {% csrf_token %}
-        {{ form|bootstrap }}
+        {{ model3d_form|bootstrap }}
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
