@@ -1,8 +1,11 @@
 Django==1.8.9
+Markdown==2.6.7
 Pillow==2.4.0
 argparse==1.2.1
 distribute==0.6.24
 django-badgify==0.1.8
+django-bootstrap-form==3.2.1
+django-filter==0.15.3
 django-hitcount==1.2.1
 djangorestframework==3.5.2
 pytz==2016.7
